@@ -51,7 +51,7 @@
 /************************************************************/
 #ifndef WADBGCONF_H
 #define WADBGCONF_H
-/*********************DebugFlags****++++*********************/
+/*********************DebugFlags*****************************/
 //_IsDebugEnabled Is Zero => Debug Is Globally Disabled
 #define _IsDebugEnabled 1
 //_IsAsserted Is Non-Zero => Debug Is Additionally Conditioned
@@ -68,7 +68,7 @@
     #define wdbg(...)
     #define adbg( boolexpr, ...)
 #endif
-/*********************Miscellany****++++*********************/
+/*********************Miscellany*****************************/
 #ifdef _WIN32
     #define __FILENAME__ QString(__FILE__).split('\\'        \
                         , QString::SkipEmptyParts).last()
