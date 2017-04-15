@@ -31,6 +31,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     canprotocol.h \
-    wadbgconf.h
+    wadbgconf.h \
+    wmiscellany.h
 
 FORMS    += mainwindow.ui

@@ -11,7 +11,12 @@
 /* 3) To Add Position Into Debug Printed-Out Messages       */
 /*    To Enable This, Set _IsLocated To Non-Zero            */
 /*    To Disable This, Set _IsLocated To Zero               */
-/*II) TWO FUNCTIONS: wdbg() and adbg()                      */
+/*II) THREE FUNCTIONS: dbgwrp(), wdbg() and adbg()          */
+/*    FUNCTION dbgwrp stands for Debugging Wrapper          */
+/*    Usage: dbgwrp(<logical expression>, <code>) acts like */
+/*      a switch to execute <code>, just simple as follows, */
+/*      when <logical expression> is TRUE, then run <code>  */
+/*      when <logical expression> is FALSE, do nothing      */
 /*    FUNCTION wdbg inherits from qDebug()                  */
 /*    Usage: wdbg(<Input>) acts like qDebug() << <Input>;   */
 /*      Ex: <Input> can be "ahjhj" << 5+8 << QBArr.toHex()  */
@@ -48,6 +53,15 @@
 /*    <101>=>debug msg 3 etc <- int qMain(int, char**) "ma- */
 /*                                               -in.cpp" 8 */
 /*    <100>=>debug msg 3 etc                                */
+/* 4) Providing a situation that debug messages from an in- */
+/*      -dividual class (not all classes) are not necessary */
+/*      , then here is a way to turn on/off those messages: */
+/*      a) Below #define <CLASSNAME> in file <classname>.h, */
+/*         insert #define UniqueKeyNameToTurnOn4ThisClass 1 */
+/*                                 (Turn Off = Set To Zero) */
+/*      b) Use dbgwrp() in combination with wdbg() or adbg()*/
+/*         Ex: dbgwrp(UniqueKeyNameToTurnOn4ThisClass,      */
+/*              adbg(4>9,"So Each Class Have Its Own Key"));*/
 /************************************************************/
 #ifndef WADBGCONF_H
 #define WADBGCONF_H
@@ -55,14 +69,16 @@
 //_IsDebugEnabled Is Zero => Debug Is Globally Disabled
 #define _IsDebugEnabled 1
 //_IsAsserted Is Non-Zero => Debug Is Additionally Conditioned
-#define _IsAsserted 0
+#define _IsAsserted 1
 //_IsLocated Is Non-Zero => Debug Is Verbosely Located
 #define _IsLocated 1
 /*********************Function wdbg/adbg*********************/
 #if _IsDebugEnabled
+    #define dbgwrp( boolexpr, ...)                           \
+        if (boolexpr) { __VA_ARGS__ ;}
     #define wdbg(...) qDebug() << __VA_ARGS__ << "" PosTail;
     #define adbg( boolexpr, ...)                             \
-        IfHead(boolexpr)                                     \
+        IfNotHead(boolexpr)                                  \
             wdbg("" AssHead(boolexpr) << __VA_ARGS__)
 #else
     #define wdbg(...)
@@ -77,11 +93,11 @@
                         , QString::SkipEmptyParts).last()
 #endif
 #if _IsAsserted
-    #define IfHead(boolexpr) if (!(boolexpr))
+    #define IfNotHead(boolexpr) if (!(boolexpr))
     #define AssHead(boolexpr) "ASSERT Failed : " #boolexpr   \
                               " | "
 #else
-    #define IfHead(boolexpr)
+    #define IfNotHead(boolexpr)
     #define AssHead(boolexpr)
 #endif
 #if _IsLocated
