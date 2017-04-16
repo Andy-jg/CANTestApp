@@ -8,7 +8,7 @@ QT       += core gui
 
 CONFIG   += c++11
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialbus
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialbus serialport
 
 TARGET = CANTestApp
 TEMPLATE = app
@@ -27,11 +27,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    canprotocol.cpp
+    canprotocol.cpp \
+    canbusworker.cpp
 
 HEADERS  += mainwindow.h \
     canprotocol.h \
     wadbgconf.h \
-    wmiscellany.h
+    wmiscellany.h \
+    canbusworker.h
 
 FORMS    += mainwindow.ui

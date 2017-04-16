@@ -29,10 +29,19 @@
 /*           _With ZERO _IsAsserted(),                      */
 /*           |adbg(<logical expression>, <Input>) equals to */
 /*           |wdbg(<Input>), meaning always print <Input>   */
+/*III) STRAY FUNCTION: dbg() is here for a purpose of print-*/
+/*      -ing out exactly what you input without any modific-*/
+/*      -ation by any flag, except for Flag _IsDebugEnabled */
+/*     Usage: dbg(<Input>) acts 100% as qDebug()<< <Input>; */
+/*IV) In the end, MISCELLANY section is in aid of this usage*/
 /*********************EXAMPLES*******************************/
 /*    Notation <10x> means _IsDebugEnabled Is Non-Zero      */
 /*                         _IsAsserted Is Zero              */
 /*                         _IsLocated Is Not Cared          */
+/* 0) dbg("this is not modified if printed out "<< "SURE"); */
+/*    <0xx>=>""                                             */
+/*               (All Debug Messages Are Globally Disabled) */
+/*    <1xx>=>this is not modified if printed out  SURE      */
 /* 1) wdbg("debug message"<<4<<"infinite << can follows");  */
 /*    <1x0>=>debug message 4 infinite << can follows        */
 /*    <1x1>=>debug message 4 infinite << can follows <- int */
@@ -72,26 +81,24 @@
 #define _IsAsserted 1
 //_IsLocated Is Non-Zero => Debug Is Verbosely Located
 #define _IsLocated 1
-/*********************Function wdbg/adbg*********************/
+/*********************Function Definition********************/
 #if _IsDebugEnabled
+    #define dbg(...) qDebug() << __VA_ARGS__;
     #define dbgwrp( boolexpr, ...)                           \
-        if (boolexpr) { __VA_ARGS__ ;}
+        if (boolexpr) { __VA_ARGS__;}
     #define wdbg(...) qDebug() << __VA_ARGS__ << "" PosTail;
     #define adbg( boolexpr, ...)                             \
         IfNotHead(boolexpr)                                  \
             wdbg("" AssHead(boolexpr) << __VA_ARGS__)
 #else
+    #undef _IsAsserted
+    #undef _IsLocated
+    #define dbg(...)
+    #define dbgwrp( boolexpr, ...)
     #define wdbg(...)
     #define adbg( boolexpr, ...)
 #endif
-/*********************Miscellany*****************************/
-#ifdef _WIN32
-    #define __FILENAME__ QString(__FILE__).split('\\'        \
-                        , QString::SkipEmptyParts).last()
-#else
-    #define __FILENAME__ QString(__FILE__).split('/'         \
-                        , QString::SkipEmptyParts).last()
-#endif
+/************************************************************/
 #if _IsAsserted
     #define IfNotHead(boolexpr) if (!(boolexpr))
     #define AssHead(boolexpr) "ASSERT Failed : " #boolexpr   \
@@ -106,7 +113,29 @@
 #else
     #define PosTail
 #endif
+/*********************Miscellany*****************************/
+/* This piece of code supports these debug functionality,   */
+/* however, apart from the main purpose, what are defined in*/
+/* in this section can be used separately without any conce-*/
+/*  -rns for how debug flags are set. So, just have to add  */
+/*  #include "wadbgconf.h" then use them in your own style  */
+/************************************************************/
+//__FILENAME__ gives back file-name without any relative path
+//return type of QString
+#ifdef _WIN32
+    #define __FILENAME__ QString(__FILE__).split('\\'        \
+                        , QString::SkipEmptyParts).last()
+#else
+    #define __FILENAME__ QString(__FILE__).split('/'         \
+                        , QString::SkipEmptyParts).last()
+#endif
+//_VarTrk(VarName) stands for Variable Tracking
+//input directly <VarName>
+//return type of QString formatted "<VarName>=<VarValue>"
+#define _VarTrk(VarName) #VarName "="                        \
+                            + QVariant(VarName).toString()
 /************************************************************/
 #include <QDebug>
+#include <QVariant>
 /************************************************************/
 #endif // WADBGCONF_H
