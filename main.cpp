@@ -13,6 +13,5 @@ int main(int argc, char *argv[])
     dbg("=======PROGRAM STARTED=======");
     w.show();
 
-
     return a.exec();
 }

@@ -16,6 +16,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_pushButton_Send_clicked();
+    void MessageSent();
+signals:
+    void writeAMessage(const CanProtocol &);
 private:
     Ui::MainWindow *ui;
 };

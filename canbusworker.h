@@ -21,33 +21,48 @@ class CanBusWorker: public QObject
     AListOfCanProtocol bufferSend;
     AListOfCanProtocol bufferRead;
     bool isDevPickedUp();
+    bool isSignalSlotConnected = false;
+    bool isNotStarted = true;
     bool isWorking = false;
-    bool isWritable = true;
+    bool isWritable = false;
 
     static bool IsCanPluginSupported(const QString &CanPlugin);
+    void doWork();
     void connectSIGNALSLOT();
 public:
     CanBusWorker();
     CanBusWorker(const QString &CanPlugin, const QString &CanItfcName);
     ~CanBusWorker();
-    const QString &GetCanPlugin()const{ return canPlugin;}
-    const QString &GetCanInterfaceName()const{ return canInterfaceName;}
 public slots:
     void ReConfigCanBusDevice(const QString &CanPlugin, const QString &CanItfcName);
-    void doWork();
+    void startWork();
     void stopWork();
+    void pauseWork();
+    void resumeWork();
     void addToBufferSend(const CanProtocol &CanPtc);
+
+    void addToBufferSend4Debug(const CanProtocol &CanPtc);
+
     void addToBufferRead();
+    void clearBufferSend();
     void getWriteTicket();
-    void QCanBusDeviceStateChanged(QCanBusDevice::CanBusDeviceState CanBusDevState);
-    void QCanBusDeviceErrorOccurred(QCanBusDevice::CanBusError CanBusDevError);
+//    void QCanBusDeviceStateChanged(QCanBusDevice::CanBusDeviceState CanBusDevState);
+//    void QCanBusDeviceErrorOccurred(QCanBusDevice::CanBusError CanBusDevError);
 
     void aMsgOutRequest();
     void allMsgOutRequest();
+    void countBufferRead();
+    void countBufferSend();
 signals:
-    void canBusWorkerStopped();
+    void bufferReadCount(int);
+    void bufferSendCount(int);
+    void readReady();
+    void writeOK();
     void replyAMsgOutRequest(const CanProtocol &);
     void replyAllMsgOutRequest(const AListOfCanProtocol &);
+
+    void replyAMsgOutRequest4Debug(const QString &);
+
 };
 
 #endif // CANBUSWORKER_H
