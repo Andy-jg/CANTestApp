@@ -6,6 +6,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QThread *AThrd = new QThread();
+    CanBusWorker *CanBW = new CanBusWorker();
+    CanBW->moveToThread(AThrd);
+    AThrd->start();
 }
 
 MainWindow::~MainWindow()

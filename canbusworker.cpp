@@ -4,7 +4,7 @@ CanBusWorker::CanBusWorker(const QString &CanPlugin, const QString &CanItfcName)
     :canPlugin(CanPlugin), canInterfaceName(CanItfcName)
 {
     dbgwrp(CanBusDbgEn,
-           wdbg("Property Changed")
+           wdbg("New Object Created")
            dbg("    " _VarTrk(canPlugin))
            dbg("    " _VarTrk(canInterfaceName)));
 }
@@ -159,4 +159,12 @@ void CanBusWorker::connectSIGNALSLOT()
             ,this,SLOT(whenQCanBusDeviceStateChanged(QCanBusDevice::CanBusDeviceState)));
     connect(qCanBusDev,SIGNAL(errorOccurred(QCanBusDevice::CanBusError))
             ,this,SLOT(getWriteTicket()));
+}
+
+CanBusWorker::CanBusWorker()
+{
+    dbgwrp(CanBusDbgEn,
+           wdbg("New Object Created")
+           dbg("    " _VarTrk(canPlugin))
+           dbg("    " _VarTrk(canInterfaceName)));
 }

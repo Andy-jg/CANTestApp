@@ -27,6 +27,7 @@ class CanBusWorker: public QObject
     static bool IsCanPluginSupported(const QString &CanPlugin);
     void connectSIGNALSLOT();
 public:
+    CanBusWorker();
     CanBusWorker(const QString &CanPlugin, const QString &CanItfcName);
     ~CanBusWorker();
     const QString &GetCanPlugin()const{ return canPlugin;}
