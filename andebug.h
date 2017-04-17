@@ -6,12 +6,12 @@
 /*    To Disable Debug, Set _IsDebugEnabled To Zero         */
 /* 2) To Enable Assertion, Set _IsAsserted To Non-Zero      */
 /*    To Disable Assertion, Set _IsAsserted To Zero         */
-/*    When _IsAsserted = 0, function anqDebug() and adbg()      */
+/*    When _IsAsserted = 0, function anqDebug() and anAssert()      */
 /*      do the same things no matter which given conditions */
 /* 3) To Add Position Into Debug Printed-Out Messages       */
 /*    To Enable This, Set _IsLocated To Non-Zero            */
 /*    To Disable This, Set _IsLocated To Zero               */
-/*II) THREE FUNCTIONS: dbgwrp(), anqDebug() and adbg()          */
+/*II) THREE FUNCTIONS: dbgwrp(), anqDebug() and anAssert()          */
 /*    FUNCTION dbgwrp stands for Debugging Wrapper          */
 /*    Usage: dbgwrp(<logical expression>, <code>) acts like */
 /*      a switch to execute <code>, just simple as follows, */
@@ -23,11 +23,11 @@
 /*    FUNCTION adbg imitates standard method assert(),      */
 /*      and also inherits from qDebug()                     */
 /*    Usage: _With NON-ZERO _IsAsserted,                    */
-/*           |adbg(<logical expression>, <Input>) acts like */
+/*           |anAssert(<logical expression>, <Input>) acts like */
 /*           |IF NOT <logical expression> THEN anqDebug(<Input>)*/
 /*           |,meaning only print <Input> if condition fails*/
 /*           _With ZERO _IsAsserted(),                      */
-/*           |adbg(<logical expression>, <Input>) equals to */
+/*           |anAssert(<logical expression>, <Input>) equals to */
 /*           |anqDebug(<Input>), meaning always print <Input>   */
 /*III) STRAY FUNCTION: dbg() is here for a purpose of print-*/
 /*      -ing out exactly what you input without any modific-*/
@@ -48,13 +48,13 @@
 /*                          qMain(int, char**) "main.cpp" 8 */
 /*    After "<-" is the location of code anqDebug(...) above in */
 /*      a format : <function-name> <file-name> <line>       */
-/* 2) adbg(1<10, "this msg should not be printed out");     */
+/* 2) anAssert(1<10, "this msg should not be printed out");     */
 /*    <11x>=>""                                             */
 /*                    (No Debug Message Cause 1<10 Is True) */
 /*    <100>=>this msg should not be printed out             */
 /*    <101>=>this msg should not be printed out <- int qMa- */
 /*                            -in(int, char**) "main.cpp" 8 */
-/* 3) adbg((5>3)&&((1>2)||(4<3)),"debug msg"<<3<<"etc");    */
+/* 3) anAssert((5>3)&&((1>2)||(4<3)),"debug msg"<<3<<"etc");    */
 /*    <110>=>ASSERT Failed : (5>3)&&((1<2)||(4<3)) |  debug */
 /*                                                msg 3 etc */
 /*    <111>=>ASSERT Failed : (5>3)&&((1<2)||(4<3)) |  debug */
@@ -68,9 +68,9 @@
 /*      a) Below #define <CLASSNAME> in file <classname>.h, */
 /*         insert #define UniqueKeyNameToTurnOn4ThisClass 1 */
 /*                                 (Turn Off = Set To Zero) */
-/*      b) Use dbgwrp() in combination with anqDebug() or adbg()*/
+/*      b) Use dbgwrp() in combination with anqDebug() or anAssert()*/
 /*         Ex: dbgwrp(UniqueKeyNameToTurnOn4ThisClass,      */
-/*              adbg(4>9,"So Each Class Have Its Own Key"));*/
+/*              anAssert(4>9,"So Each Class Have Its Own Key"));*/
 /************************************************************/
 #ifndef ANDEBUG_H
 #define ANDEBUG_H
@@ -87,7 +87,7 @@
     #define dbgwrp( boolexpr, ...)                           \
         if (boolexpr) { __VA_ARGS__;}
     #define anqDebug(...) qDebug() << __VA_ARGS__ << "" PosTail;
-    #define adbg( boolexpr, ...)                             \
+    #define anAssert( boolexpr, ...)                             \
         IfNotHead(boolexpr)                                  \
             anqDebug("" AssHead(boolexpr) << __VA_ARGS__)
 #else
@@ -96,7 +96,7 @@
     #define dbg(...)
     #define dbgwrp( boolexpr, ...)
     #define anqDebug(...)
-    #define adbg( boolexpr, ...)
+    #define anAssert( boolexpr, ...)
 #endif
 /************************************************************/
 #if _IsAsserted

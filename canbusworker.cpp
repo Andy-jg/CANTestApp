@@ -219,7 +219,7 @@ bool CanBusWorker::isDevPickedUp()
     QString *QStrTmp = new QString();
     qCanBusDev = QCanBus::instance()->createDevice(canPlugin,canInterfaceName,QStrTmp);
     dbgwrp(CanBusDbgEn,
-           adbg(QStrTmp->size()!=0,QStrTmp));
+           anAssert(QStrTmp->size()!=0,QStrTmp));
     if (!qCanBusDev)     //alternatively: if (QStrTmp->size()!=0)
         return false;
     qCanBusDev->setConfigurationParameter(QCanBusDevice::LoopbackKey,QVariant("false"));
