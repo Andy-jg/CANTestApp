@@ -2,7 +2,7 @@
 #define CANPROTOCOL_H
 #define CanPtcDbgEn 1
 
-#include "wadbgconf.h"
+#include "andebug.h"
 #include "wmiscellany.h"
 #include <QCanBusFrame>
 #include <QByteArray>

@@ -32,8 +32,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     canprotocol.h \
-    wadbgconf.h \
     wmiscellany.h \
-    canbusworker.h
+    canbusworker.h \
+    andebug.h
 
 FORMS    += mainwindow.ui

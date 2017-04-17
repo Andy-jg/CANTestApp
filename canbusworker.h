@@ -2,7 +2,7 @@
 #define CANBUSWORKER_H
 #define CanBusDbgEn 1
 
-#include "wadbgconf.h"
+#include "andebug.h"
 #include "canprotocol.h"
 #include <QCanBus>
 #include <QCanBusDevice>

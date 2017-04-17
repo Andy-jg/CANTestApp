@@ -4,7 +4,7 @@ CanBusWorker::CanBusWorker(const QString &CanPlugin, const QString &CanItfcName)
     :canPlugin(CanPlugin), canInterfaceName(CanItfcName)
 {
     dbgwrp(CanBusDbgEn,
-           wdbg("New Object Created")
+           anqDebug("New Object Created")
            dbg("    " _VarTrk(canPlugin))
            dbg("    " _VarTrk(canInterfaceName)));
 }
@@ -15,7 +15,7 @@ CanBusWorker::~CanBusWorker()
     qCanBusDev->disconnectDevice();
     delete qCanBusDev;
     dbgwrp(CanBusDbgEn,
-           wdbg("Destructor Called"));
+           anqDebug("Destructor Called"));
 }
 
 void CanBusWorker::ReConfigCanBusDevice(const QString &CanPlugin, const QString &CanItfcName)
@@ -23,7 +23,7 @@ void CanBusWorker::ReConfigCanBusDevice(const QString &CanPlugin, const QString 
     canPlugin = CanPlugin;
     canInterfaceName = CanItfcName;
     dbgwrp(CanBusDbgEn,
-           wdbg("Property Changed")
+           anqDebug("Property Changed")
            dbg("    " _VarTrk(canPlugin))
            dbg("    " _VarTrk(canInterfaceName)));
     stopWork();
@@ -41,7 +41,7 @@ void CanBusWorker::startWork()
         {
             if (!isDevPickedUp()){
                 dbgwrp(CanBusDbgEn,
-                       wdbg("KO Device Not Obtained"));
+                       anqDebug("KO Device Not Obtained"));
                 return;
             }
             connectSIGNALSLOT();
@@ -53,7 +53,7 @@ void CanBusWorker::startWork()
     }
     else{
         dbgwrp(CanBusDbgEn,
-               wdbg("Worker ALREADY Started"));
+               anqDebug("Worker ALREADY Started"));
         return;
     }
 }
@@ -63,7 +63,7 @@ void CanBusWorker::doWork()
     if (!isNotStarted)
     {
         dbgwrp(CanBusDbgEn,
-               wdbg("Worker Started"));
+               anqDebug("Worker Started"));
         while (isWorking)
         {
             qApp->processEvents();
@@ -71,12 +71,12 @@ void CanBusWorker::doWork()
                 CanProtocol *CanPtcTmp = new CanProtocol(qCanBusDev->readFrame());
                 bufferRead.append(CanPtcTmp);
                 dbgwrp(CanBusDbgEn,
-                       wdbg("BufferRead Added In While Loop")
+                       anqDebug("BufferRead Added In While Loop")
                        dbg("    " _VarTrk(bufferRead.last()->GetMsgStr())));
             }
             if (isWritable && (!bufferSend.isEmpty())){
                 dbgwrp(CanBusDbgEn,
-                       wdbg("A CanProtocol Sent")
+                       anqDebug("A CanProtocol Sent")
                        dbg("    MsgSent="+bufferSend.first()->GetMsgStr()));
                 qCanBusDev->writeFrame(bufferSend.takeFirst()->GetMsg());
                 isWritable = false;
@@ -86,12 +86,12 @@ void CanBusWorker::doWork()
             }
         }
         dbgwrp(CanBusDbgEn,
-               wdbg("Worker Paused"));
+               anqDebug("Worker Paused"));
     }
     else
     {
         dbgwrp(CanBusDbgEn,
-               wdbg("Worker Not Started"));
+               anqDebug("Worker Not Started"));
     }
 }
 
@@ -102,21 +102,21 @@ void CanBusWorker::stopWork()
     clearBufferSend();
     isNotStarted = true;
     dbgwrp(CanBusDbgEn,
-           wdbg(_VarTrk(isNotStarted)));
+           anqDebug(_VarTrk(isNotStarted)));
 }
 
 void CanBusWorker::pauseWork()
 {
     isWorking = false;
     dbgwrp(CanBusDbgEn,
-           wdbg(_VarTrk(isWorking)));
+           anqDebug(_VarTrk(isWorking)));
 }
 
 void CanBusWorker::resumeWork()
 {
     isWorking = true;
     dbgwrp(CanBusDbgEn,
-           wdbg(_VarTrk(isWorking)));
+           anqDebug(_VarTrk(isWorking)));
     doWork();
 }
 
@@ -124,7 +124,7 @@ void CanBusWorker::addToBufferSend(const CanProtocol &CanPtc)
 {
     bufferSend.append(&CanPtc);
     dbgwrp(CanBusDbgEn,
-           wdbg("BufferSend Added")
+           anqDebug("BufferSend Added")
            dbg("    " _VarTrk(bufferSend.last()->GetMsgStr())));
 }
 
@@ -132,7 +132,7 @@ void CanBusWorker::addToBufferSend4Debug(const CanProtocol &CanPtc)
 {
     bufferSend.append(&CanPtc);
     dbgwrp(CanBusDbgEn,
-           wdbg("BufferSend Added")
+           anqDebug("BufferSend Added")
            dbg("    " _VarTrk(bufferSend.last()->GetMsgStr())));
     emit bufferSendCount(bufferSend.size());
 }
@@ -141,7 +141,7 @@ void CanBusWorker::addToBufferRead()
 {
     bufferRead.append(new CanProtocol(qCanBusDev->readFrame()));
     dbgwrp(CanBusDbgEn,
-           wdbg("BufferRead Added")
+           anqDebug("BufferRead Added")
            dbg("    " _VarTrk(bufferRead.last()->GetMsgStr()))
            dbg("    readReady() emitted"));
     emit readReady();
@@ -151,7 +151,7 @@ void CanBusWorker::clearBufferSend()
 {
     bufferSend = AListOfCanProtocol();
     dbgwrp(CanBusDbgEn,
-           wdbg("BufferSend Cleared"));
+           anqDebug("BufferSend Cleared"));
 }
 
 void CanBusWorker::getWriteTicket()
@@ -159,27 +159,27 @@ void CanBusWorker::getWriteTicket()
     isWritable = true;
     emit writeOK();
     dbgwrp(CanBusDbgEn,
-           wdbg(_VarTrk(isWritable)));
+           anqDebug(_VarTrk(isWritable)));
 }
 
 //void CanBusWorker::QCanBusDeviceStateChanged(QCanBusDevice::CanBusDeviceState CanBusDevState)
 //{
 //    dbgwrp(CanBusDbgEn,
-//           wdbg("CHANGE")
+//           anqDebug("CHANGE")
 //           dbg("    " _VarTrk(CanBusDevState)));
 //}
 
 //void CanBusWorker::QCanBusDeviceErrorOccurred(QCanBusDevice::CanBusError CanBusDevError)
 //{
 //    dbgwrp(CanBusDbgEn,
-//           wdbg("KO")
+//           anqDebug("KO")
 //           dbg("    " _VarTrk(CanBusDevError)));
 //}
 
 void CanBusWorker::aMsgOutRequest()
 {
     dbgwrp(CanBusDbgEn,
-           wdbg("A Message Emitted")
+           anqDebug("A Message Emitted")
            dbg("    " _VarTrk(bufferRead.first()->GetMsgStr())));
     emit replyAMsgOutRequest4Debug(bufferRead.first()->GetMsgStr());
     emit replyAMsgOutRequest(*bufferRead.takeFirst());
@@ -189,7 +189,7 @@ void CanBusWorker::allMsgOutRequest()
 {
     emit replyAllMsgOutRequest(bufferRead);
     dbgwrp(CanBusDbgEn,
-           wdbg("ALL Message Emitted")
+           anqDebug("ALL Message Emitted")
            dbg("    " _VarTrk(bufferRead.first()->GetMsgStr())));
     bufferRead = AListOfCanProtocol();
 }
@@ -198,21 +198,21 @@ void CanBusWorker::countBufferRead()
 {
     emit bufferReadCount(bufferRead.size());
     dbgwrp(CanBusDbgEn,
-           wdbg("bufferReadCount Emitted"));
+           anqDebug("bufferReadCount Emitted"));
 }
 
 void CanBusWorker::countBufferSend()
 {
     emit bufferSendCount(bufferSend.size());
     dbgwrp(CanBusDbgEn,
-           wdbg("bufferSendCount Emitted"));
+           anqDebug("bufferSendCount Emitted"));
 }
 
 bool CanBusWorker::isDevPickedUp()
 {
     if (!IsCanPluginSupported(canPlugin)){
         dbgwrp(CanBusDbgEn,
-               wdbg("Plugin Not Supported")
+               anqDebug("Plugin Not Supported")
                dbg("    " _VarTrk(canPlugin)));
         return false;
     }
@@ -225,10 +225,10 @@ bool CanBusWorker::isDevPickedUp()
     qCanBusDev->setConfigurationParameter(QCanBusDevice::LoopbackKey,QVariant("false"));
     if (!(qCanBusDev->connectDevice())){
         dbgwrp(CanBusDbgEn,
-               wdbg("Device Not Connected"));
+               anqDebug("Device Not Connected"));
         return false;
     }
-    dbgwrp(CanBusDbgEn,wdbg("OK Device Obtained"));
+    dbgwrp(CanBusDbgEn,anqDebug("OK Device Obtained"));
     return true;
 }
 
@@ -242,7 +242,7 @@ void CanBusWorker::connectSIGNALSLOT()
     if (isSignalSlotConnected)
     {
         dbgwrp(CanBusDbgEn,
-               wdbg("SignalSlot ALREADY Connected"));
+               anqDebug("SignalSlot ALREADY Connected"));
         return;
     }
     connect(qCanBusDev,SIGNAL(framesReceived()),this,SLOT(addToBufferRead()));
@@ -253,13 +253,13 @@ void CanBusWorker::connectSIGNALSLOT()
             ,this,SLOT(getWriteTicket()));
     isSignalSlotConnected = true;
     dbgwrp(CanBusDbgEn,
-           wdbg("SignalSlot Connected"));
+           anqDebug("SignalSlot Connected"));
 }
 
 CanBusWorker::CanBusWorker()
 {
     dbgwrp(CanBusDbgEn,
-           wdbg("New Object Created")
+           anqDebug("New Object Created")
            dbg("    " _VarTrk(canPlugin))
            dbg("    " _VarTrk(canInterfaceName)));
 }

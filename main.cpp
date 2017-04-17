@@ -1,10 +1,11 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QDebug>
-#include "wadbgconf.h"
+#include "andebug.h"
 #include "canprotocol.h"
 #include "wmiscellany.h"
 #include <QTextStream>
+#include "assert.h"
 
 int main(int argc, char *argv[])
 {
