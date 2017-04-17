@@ -2,14 +2,14 @@
 
 CanProtocol::CanProtocol()
 {
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("New Empty Object Created"));
 }
 
 CanProtocol::CanProtocol(quint8 identifier, const QByteArray &data)
     :QCanBusFrame(  identifier, data)
 {
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("New Object Created")
            dbg("   Id/hex="<<QByteArray::number(frameId(),16))
            dbg("   Data/hex="<<payload().toHex()));
@@ -18,7 +18,7 @@ CanProtocol::CanProtocol(quint8 identifier, const QByteArray &data)
 CanProtocol::CanProtocol(const QCanBusFrame &CanMsg)
     :QCanBusFrame(  CanMsg.frameId(), CanMsg.payload())
 {
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("New Object Imported")
            dbg("   Id/hex="<<QByteArray::number(frameId(),16))
            dbg("   Data/hex="<<payload().toHex()));
@@ -28,7 +28,7 @@ void CanProtocol::operator=(const QCanBusFrame &CanMsg)
 {
     setFrameId(CanMsg.frameId());
     setPayload(CanMsg.payload());
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("Properties Assigned")
            dbg("   Id/hex="<<QByteArray::number(frameId(),16))
            dbg("   Data/hex="<<payload().toHex()));
@@ -38,17 +38,17 @@ bool CanProtocol::IsOfRightFormat() const
 {
     if ((payload().size()==8) && ((frameId()>>8)==0))
     {
-        dbgwrp(CanPtcDbgEn,anqDebug("OK"));
+        anDebugWrap(CanPtcDbgEn,anqDebug("OK"));
         return true;
     }
-    dbgwrp(CanPtcDbgEn,anqDebug("KO"));
+    anDebugWrap(CanPtcDbgEn,anqDebug("KO"));
     return false;
 }
 
 CanProtocol &CanProtocol::SetSdcsId(quint8 sdcsid)
 {
     setFrameId(frameId()|(sdcsid<<4));
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
            dbg("   Id/hex="<<QByteArray::number(frameId(),16)));
     return *this;
@@ -57,7 +57,7 @@ CanProtocol &CanProtocol::SetSdcsId(quint8 sdcsid)
 CanProtocol &CanProtocol::SetChId(quint8 chid)
 {
     setFrameId(frameId()|chid);
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
            dbg("   Id/hex="<<QByteArray::number(frameId(),16)));
     return *this;
@@ -76,7 +76,7 @@ CanProtocol &CanProtocol::SetRFID(const QByteArray &rfid)
             setPayload(payload().remove(0,QInt8Tmp-3));
         setPayload(payload().prepend(QBArrTmp));
     }
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
            dbg("   Data/hex="<<payload().toHex()));
     return *this;
@@ -95,7 +95,7 @@ CanProtocol &CanProtocol::SetValveControl(bool SetBit, bool ResetBit)
     else
         AByte&=0xfe;
     setPayload(payload().remove(QInt8Tmp,1)<<AByte);
-    dbgwrp(CanPtcDbgEn,
+    anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
            dbg("   Data/hex="<<payload().toHex()));
     return *this;

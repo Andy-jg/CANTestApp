@@ -11,9 +11,9 @@
 /* 3) To Add Position Into Debug Printed-Out Messages       */
 /*    To Enable This, Set _IsLocated To Non-Zero            */
 /*    To Disable This, Set _IsLocated To Zero               */
-/*II) THREE FUNCTIONS: dbgwrp(), anqDebug() and anAssert()          */
+/*II) THREE FUNCTIONS: anDebugWrap(), anqDebug() and anAssert()          */
 /*    FUNCTION dbgwrp stands for Debugging Wrapper          */
-/*    Usage: dbgwrp(<logical expression>, <code>) acts like */
+/*    Usage: anDebugWrap(<logical expression>, <code>) acts like */
 /*      a switch to execute <code>, just simple as follows, */
 /*      when <logical expression> is TRUE, then run <code>  */
 /*      when <logical expression> is FALSE, do nothing      */
@@ -68,8 +68,8 @@
 /*      a) Below #define <CLASSNAME> in file <classname>.h, */
 /*         insert #define UniqueKeyNameToTurnOn4ThisClass 1 */
 /*                                 (Turn Off = Set To Zero) */
-/*      b) Use dbgwrp() in combination with anqDebug() or anAssert()*/
-/*         Ex: dbgwrp(UniqueKeyNameToTurnOn4ThisClass,      */
+/*      b) Use anDebugWrap() in combination with anqDebug() or anAssert()*/
+/*         Ex: anDebugWrap(UniqueKeyNameToTurnOn4ThisClass,      */
 /*              anAssert(4>9,"So Each Class Have Its Own Key"));*/
 /************************************************************/
 #ifndef ANDEBUG_H
@@ -84,7 +84,7 @@
 /*********************Function Definition********************/
 #if _IsDebugEnabled
     #define dbg(...) qDebug() << __VA_ARGS__;
-    #define dbgwrp( boolexpr, ...)                           \
+    #define anDebugWrap( boolexpr, ...)                           \
         if (boolexpr) { __VA_ARGS__;}
     #define anqDebug(...) qDebug() << __VA_ARGS__ << "" PosTail;
     #define anAssert( boolexpr, ...)                             \
@@ -94,7 +94,7 @@
     #undef _IsAsserted
     #undef _IsLocated
     #define dbg(...)
-    #define dbgwrp( boolexpr, ...)
+    #define anDebugWrap( boolexpr, ...)
     #define anqDebug(...)
     #define anAssert( boolexpr, ...)
 #endif
