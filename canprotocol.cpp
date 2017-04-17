@@ -11,8 +11,8 @@ CanProtocol::CanProtocol(quint8 identifier, const QByteArray &data)
 {
     anDebugWrap(CanPtcDbgEn,
            anqDebug("New Object Created")
-           dbg("   Id/hex="<<QByteArray::number(frameId(),16))
-           dbg("   Data/hex="<<payload().toHex()));
+           anDebug("   Id/hex="<<QByteArray::number(frameId(),16))
+           anDebug("   Data/hex="<<payload().toHex()));
 }
 
 CanProtocol::CanProtocol(const QCanBusFrame &CanMsg)
@@ -20,8 +20,8 @@ CanProtocol::CanProtocol(const QCanBusFrame &CanMsg)
 {
     anDebugWrap(CanPtcDbgEn,
            anqDebug("New Object Imported")
-           dbg("   Id/hex="<<QByteArray::number(frameId(),16))
-           dbg("   Data/hex="<<payload().toHex()));
+           anDebug("   Id/hex="<<QByteArray::number(frameId(),16))
+           anDebug("   Data/hex="<<payload().toHex()));
 }
 
 void CanProtocol::operator=(const QCanBusFrame &CanMsg)
@@ -30,8 +30,8 @@ void CanProtocol::operator=(const QCanBusFrame &CanMsg)
     setPayload(CanMsg.payload());
     anDebugWrap(CanPtcDbgEn,
            anqDebug("Properties Assigned")
-           dbg("   Id/hex="<<QByteArray::number(frameId(),16))
-           dbg("   Data/hex="<<payload().toHex()));
+           anDebug("   Id/hex="<<QByteArray::number(frameId(),16))
+           anDebug("   Data/hex="<<payload().toHex()));
 }
 
 bool CanProtocol::IsOfRightFormat() const
@@ -50,7 +50,7 @@ CanProtocol &CanProtocol::SetSdcsId(quint8 sdcsid)
     setFrameId(frameId()|(sdcsid<<4));
     anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
-           dbg("   Id/hex="<<QByteArray::number(frameId(),16)));
+           anDebug("   Id/hex="<<QByteArray::number(frameId(),16)));
     return *this;
 }
 
@@ -59,7 +59,7 @@ CanProtocol &CanProtocol::SetChId(quint8 chid)
     setFrameId(frameId()|chid);
     anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
-           dbg("   Id/hex="<<QByteArray::number(frameId(),16)));
+           anDebug("   Id/hex="<<QByteArray::number(frameId(),16)));
     return *this;
 }
 
@@ -78,7 +78,7 @@ CanProtocol &CanProtocol::SetRFID(const QByteArray &rfid)
     }
     anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
-           dbg("   Data/hex="<<payload().toHex()));
+           anDebug("   Data/hex="<<payload().toHex()));
     return *this;
 }
 
@@ -97,7 +97,7 @@ CanProtocol &CanProtocol::SetValveControl(bool SetBit, bool ResetBit)
     setPayload(payload().remove(QInt8Tmp,1)<<AByte);
     anDebugWrap(CanPtcDbgEn,
            anqDebug("Property Changed")
-           dbg("   Data/hex="<<payload().toHex()));
+           anDebug("   Data/hex="<<payload().toHex()));
     return *this;
 }
 

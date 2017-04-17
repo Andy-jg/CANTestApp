@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "andebug.h"
 #include "canprotocol.h"
-#include "wmiscellany.h"
+#include "straystuffs.h"
 #include <QTextStream>
 #include "assert.h"
 
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    dbg("=======PROGRAM STARTED=======");
+    anDebug("=======PROGRAM STARTED=======");
     w.show();
 
     return a.exec();

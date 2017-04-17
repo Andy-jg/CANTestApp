@@ -3,7 +3,7 @@
 #define CanPtcDbgEn 1
 
 #include "andebug.h"
-#include "wmiscellany.h"
+#include "straystuffs.h"
 #include <QCanBusFrame>
 #include <QByteArray>
 

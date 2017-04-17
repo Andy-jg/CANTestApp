@@ -6,55 +6,58 @@
 /*    To Disable Debug, Set _IsDebugEnabled To Zero         */
 /* 2) To Enable Assertion, Set _IsAsserted To Non-Zero      */
 /*    To Disable Assertion, Set _IsAsserted To Zero         */
-/*    When _IsAsserted = 0, function anqDebug() and anAssert()      */
+/*    When _IsAsserted = 0, both anqDebug() and anAssert()  */
 /*      do the same things no matter which given conditions */
 /* 3) To Add Position Into Debug Printed-Out Messages       */
 /*    To Enable This, Set _IsLocated To Non-Zero            */
 /*    To Disable This, Set _IsLocated To Zero               */
-/*II) THREE FUNCTIONS: anDebugWrap(), anqDebug() and anAssert()          */
-/*    FUNCTION dbgwrp stands for Debugging Wrapper          */
-/*    Usage: anDebugWrap(<logical expression>, <code>) acts like */
-/*      a switch to execute <code>, just simple as follows, */
+/*II) THREE FUNCTIONS:                                      */
+/*          anDebugWrap(), anqDebug() and anAssert()        */
+/*    FUNCTION anDebugWrap() stands for Debugging Wrapper   */
+/*    Usage: anDebugWrap(<logical expression>, <code>) acts */
+/*    as a switch to execute <code>, just simple as follows,*/
 /*      when <logical expression> is TRUE, then run <code>  */
 /*      when <logical expression> is FALSE, do nothing      */
 /*    FUNCTION wdbg inherits from qDebug()                  */
-/*    Usage: anqDebug(<Input>) acts like qDebug() << <Input>;   */
+/*    Usage: anqDebug(<Input>) acts as qDebug() << <Input>; */
 /*      Ex: <Input> can be "ahjhj" << 5+8 << QBArr.toHex()  */
 /*    FUNCTION adbg imitates standard method assert(),      */
 /*      and also inherits from qDebug()                     */
-/*    Usage: _With NON-ZERO _IsAsserted,                    */
-/*           |anAssert(<logical expression>, <Input>) acts like */
-/*           |IF NOT <logical expression> THEN anqDebug(<Input>)*/
-/*           |,meaning only print <Input> if condition fails*/
-/*           _With ZERO _IsAsserted(),                      */
-/*           |anAssert(<logical expression>, <Input>) equals to */
-/*           |anqDebug(<Input>), meaning always print <Input>   */
-/*III) STRAY FUNCTION: dbg() is here for a purpose of print-*/
-/*      -ing out exactly what you input without any modific-*/
-/*      -ation by any flag, except for Flag _IsDebugEnabled */
-/*     Usage: dbg(<Input>) acts 100% as qDebug()<< <Input>; */
+/*    Usage:__With NON-ZERO _IsAsserted,                    */
+/*          |anAssert(<logical expression>, <Input>) acts as*/
+/*          |IF NOT <logical expression>                    */
+/*          |       THEN anqDebug(<Input>)                  */
+/*          |,meaning only print <Input> if condition fails */
+/*          __With ZERO _IsAsserted(),                      */
+/*          |anAssert(<logical expression>, <Input>)        */
+/*          |is identical to anqDebug(<Input>)              */
+/*          |, meaning always print <Input>                 */
+/*III) STRAY FUNCTION: anDebug() is here for a purpose of   */
+/*      printing out exactly what you input without any mod-*/
+/*      -ification by any flag, except for _IsDebugEnabled  */
+/*     Usage: anDebug(<Input>) equals to qDebug()<< <Input>;*/
 /*IV) In the end, MISCELLANY section is in aid of this usage*/
 /*********************EXAMPLES*******************************/
 /*    Notation <10x> means _IsDebugEnabled Is Non-Zero      */
 /*                         _IsAsserted Is Zero              */
 /*                         _IsLocated Is Not Cared          */
-/* 0) dbg("this is not modified if printed out "<< "SURE"); */
+/* 0) anDebug("this is not modified if printed out "<<"OK");*/
 /*    <0xx>=>""                                             */
 /*               (All Debug Messages Are Globally Disabled) */
-/*    <1xx>=>this is not modified if printed out  SURE      */
-/* 1) anqDebug("debug message"<<4<<"infinite << can follows");  */
-/*    <1x0>=>debug message 4 infinite << can follows        */
-/*    <1x1>=>debug message 4 infinite << can follows <- int */
+/*    <1xx>=>this is not modified if printed out  OK        */
+/* 1) anqDebug("deb essage"<<4<<"infinite << can follow");  */
+/*    <1x0>=>deb essage 4 infinite << can follow            */
+/*    <1x1>=>deb essage 4 infinite << can follow <- int     */
 /*                          qMain(int, char**) "main.cpp" 8 */
-/*    After "<-" is the location of code anqDebug(...) above in */
-/*      a format : <function-name> <file-name> <line>       */
-/* 2) anAssert(1<10, "this msg should not be printed out");     */
+/*    After "<-" is the location of code anqDebug(...) above*/
+/*     in a format : <function-name> <file-name> <line>     */
+/* 2) anAssert(1<10, "this msg should not be printed out"); */
 /*    <11x>=>""                                             */
 /*                    (No Debug Message Cause 1<10 Is True) */
 /*    <100>=>this msg should not be printed out             */
 /*    <101>=>this msg should not be printed out <- int qMa- */
 /*                            -in(int, char**) "main.cpp" 8 */
-/* 3) anAssert((5>3)&&((1>2)||(4<3)),"debug msg"<<3<<"etc");    */
+/* 3) anAssert((5>3)&&((1>2)||(4<3)),"debug msg"<<3<<"etc");*/
 /*    <110>=>ASSERT Failed : (5>3)&&((1<2)||(4<3)) |  debug */
 /*                                                msg 3 etc */
 /*    <111>=>ASSERT Failed : (5>3)&&((1<2)||(4<3)) |  debug */
@@ -68,9 +71,11 @@
 /*      a) Below #define <CLASSNAME> in file <classname>.h, */
 /*         insert #define UniqueKeyNameToTurnOn4ThisClass 1 */
 /*                                 (Turn Off = Set To Zero) */
-/*      b) Use anDebugWrap() in combination with anqDebug() or anAssert()*/
-/*         Ex: anDebugWrap(UniqueKeyNameToTurnOn4ThisClass,      */
-/*              anAssert(4>9,"So Each Class Have Its Own Key"));*/
+/*      b) Use anDebugWrap() in combination with functions  */
+/*                  anDebug(), anqDebug() or anAssert()     */
+/*         Ex:                                              */
+/*          anDebugWrap(UniqueKeyNameToTurnOn4ThisClass,    */
+/*          anAssert(4>9,"So Each Class Have Its Own Key"));*/
 /************************************************************/
 #ifndef ANDEBUG_H
 #define ANDEBUG_H
@@ -83,35 +88,37 @@
 #define _IsLocated 1
 /*********************Function Definition********************/
 #if _IsDebugEnabled
-    #define dbg(...) qDebug() << __VA_ARGS__;
-    #define anDebugWrap( boolexpr, ...)                           \
-        if (boolexpr) { __VA_ARGS__;}
-    #define anqDebug(...) qDebug() << __VA_ARGS__ << "" PosTail;
-    #define anAssert( boolexpr, ...)                             \
-        IfNotHead(boolexpr)                                  \
-            anqDebug("" AssHead(boolexpr) << __VA_ARGS__)
+    #define anDebug(...) qDebug() << __VA_ARGS__;
+    #define anDebugWrap( LogicalExpression, ...)             \
+        if (LogicalExpression) { __VA_ARGS__;}
+    #define anqDebug(...) qDebug() << __VA_ARGS__            \
+                                    << "" anDebugLocation;
+    #define anAssert( LogicalExpression, ...)                \
+        IfNot(LogicalExpression)                             \
+            anqDebug("" AssHead(LogicalExpression)           \
+                        << __VA_ARGS__)
 #else
     #undef _IsAsserted
     #undef _IsLocated
-    #define dbg(...)
-    #define anDebugWrap( boolexpr, ...)
+    #define anDebug(...)
+    #define anDebugWrap( LogicalExpression, ...)
     #define anqDebug(...)
-    #define anAssert( boolexpr, ...)
+    #define anAssert( LogicalExpression, ...)
 #endif
 /************************************************************/
 #if _IsAsserted
-    #define IfNotHead(boolexpr) if (!(boolexpr))
-    #define AssHead(boolexpr) "ASSERT Failed : " #boolexpr   \
-                              " | "
+    #define IfNot(LogicalExpression) if (!(LogicalExpression))
+    #define AssHead(LogicalExpression) "ASSERT Failed : "    \
+                    #LogicalExpression " | "
 #else
-    #define IfNotHead(boolexpr)
-    #define AssHead(boolexpr)
+    #define IfNot(LogicalExpression)
+    #define AssHead(LogicalExpression)
 #endif
 #if _IsLocated
-    #define PosTail "<-"                                     \
+    #define anDebugLocation "<-"                             \
         << __PRETTY_FUNCTION__ << __FILENAME__ << __LINE__
 #else
-    #define PosTail
+    #define anDebugLocation
 #endif
 /*********************Miscellany*****************************/
 /* This piece of code supports these debug functionality,   */
@@ -129,10 +136,10 @@
     #define __FILENAME__ QString(__FILE__).split('/'         \
                         , QString::SkipEmptyParts).last()
 #endif
-//_VarTrk(VarName) stands for Variable Tracking
+//_VarView(VarName) stands for Variable View
 //input directly <VarName>
 //return type of QString formatted "<VarName>=<VarValue>"
-#define _VarTrk(VarName) #VarName "="                        \
+#define _VarView(VarName) #VarName "="                       \
                             + QVariant(VarName).toString()
 /************************************************************/
 #include <QDebug>

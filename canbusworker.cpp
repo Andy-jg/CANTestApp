@@ -5,8 +5,8 @@ CanBusWorker::CanBusWorker(const QString &CanPlugin, const QString &CanItfcName)
 {
     anDebugWrap(CanBusDbgEn,
            anqDebug("New Object Created")
-           dbg("    " _VarTrk(canPlugin))
-           dbg("    " _VarTrk(canInterfaceName)));
+           anDebug("    " _VarView(canPlugin))
+           anDebug("    " _VarView(canInterfaceName)));
 }
 
 CanBusWorker::~CanBusWorker()
@@ -24,8 +24,8 @@ void CanBusWorker::ReConfigCanBusDevice(const QString &CanPlugin, const QString 
     canInterfaceName = CanItfcName;
     anDebugWrap(CanBusDbgEn,
            anqDebug("Property Changed")
-           dbg("    " _VarTrk(canPlugin))
-           dbg("    " _VarTrk(canInterfaceName)));
+           anDebug("    " _VarView(canPlugin))
+           anDebug("    " _VarView(canInterfaceName)));
     stopWork();
     qCanBusDev->disconnect();
     qCanBusDev->disconnectDevice();
@@ -72,17 +72,17 @@ void CanBusWorker::doWork()
                 bufferRead.append(CanPtcTmp);
                 anDebugWrap(CanBusDbgEn,
                        anqDebug("BufferRead Added In While Loop")
-                       dbg("    " _VarTrk(bufferRead.last()->GetMsgStr())));
+                       anDebug("    " _VarView(bufferRead.last()->GetMsgStr())));
             }
             if (isWritable && (!bufferSend.isEmpty())){
                 anDebugWrap(CanBusDbgEn,
                        anqDebug("A CanProtocol Sent")
-                       dbg("    MsgSent="+bufferSend.first()->GetMsgStr()));
+                       anDebug("    MsgSent="+bufferSend.first()->GetMsgStr()));
                 qCanBusDev->writeFrame(bufferSend.takeFirst()->GetMsg());
                 isWritable = false;
                 anDebugWrap(CanBusDbgEn,
                        anDebugWrap(!bufferSend.isEmpty(),
-                       dbg("    NextMsg="+bufferSend.at(0)->GetMsgStr())));
+                       anDebug("    NextMsg="+bufferSend.at(0)->GetMsgStr())));
             }
         }
         anDebugWrap(CanBusDbgEn,
@@ -102,21 +102,21 @@ void CanBusWorker::stopWork()
     clearBufferSend();
     isNotStarted = true;
     anDebugWrap(CanBusDbgEn,
-           anqDebug(_VarTrk(isNotStarted)));
+           anqDebug(_VarView(isNotStarted)));
 }
 
 void CanBusWorker::pauseWork()
 {
     isWorking = false;
     anDebugWrap(CanBusDbgEn,
-           anqDebug(_VarTrk(isWorking)));
+           anqDebug(_VarView(isWorking)));
 }
 
 void CanBusWorker::resumeWork()
 {
     isWorking = true;
     anDebugWrap(CanBusDbgEn,
-           anqDebug(_VarTrk(isWorking)));
+           anqDebug(_VarView(isWorking)));
     doWork();
 }
 
@@ -125,7 +125,7 @@ void CanBusWorker::addToBufferSend(const CanProtocol &CanPtc)
     bufferSend.append(&CanPtc);
     anDebugWrap(CanBusDbgEn,
            anqDebug("BufferSend Added")
-           dbg("    " _VarTrk(bufferSend.last()->GetMsgStr())));
+           anDebug("    " _VarView(bufferSend.last()->GetMsgStr())));
 }
 
 void CanBusWorker::addToBufferSend4Debug(const CanProtocol &CanPtc)
@@ -133,7 +133,7 @@ void CanBusWorker::addToBufferSend4Debug(const CanProtocol &CanPtc)
     bufferSend.append(&CanPtc);
     anDebugWrap(CanBusDbgEn,
            anqDebug("BufferSend Added")
-           dbg("    " _VarTrk(bufferSend.last()->GetMsgStr())));
+           anDebug("    " _VarView(bufferSend.last()->GetMsgStr())));
     emit bufferSendCount(bufferSend.size());
 }
 
@@ -142,8 +142,8 @@ void CanBusWorker::addToBufferRead()
     bufferRead.append(new CanProtocol(qCanBusDev->readFrame()));
     anDebugWrap(CanBusDbgEn,
            anqDebug("BufferRead Added")
-           dbg("    " _VarTrk(bufferRead.last()->GetMsgStr()))
-           dbg("    readReady() emitted"));
+           anDebug("    " _VarView(bufferRead.last()->GetMsgStr()))
+           anDebug("    readReady() emitted"));
     emit readReady();
 }
 
@@ -152,6 +152,7 @@ void CanBusWorker::clearBufferSend()
     bufferSend = AListOfCanProtocol();
     anDebugWrap(CanBusDbgEn,
            anqDebug("BufferSend Cleared"));
+    emit bufferSendCount(0);
 }
 
 void CanBusWorker::getWriteTicket()
@@ -159,28 +160,28 @@ void CanBusWorker::getWriteTicket()
     isWritable = true;
     emit writeOK();
     anDebugWrap(CanBusDbgEn,
-           anqDebug(_VarTrk(isWritable)));
+           anqDebug(_VarView(isWritable)));
 }
 
 //void CanBusWorker::QCanBusDeviceStateChanged(QCanBusDevice::CanBusDeviceState CanBusDevState)
 //{
 //    anDebugWrap(CanBusDbgEn,
 //           anqDebug("CHANGE")
-//           dbg("    " _VarTrk(CanBusDevState)));
+//           anDebug("    " _VarView(CanBusDevState)));
 //}
 
 //void CanBusWorker::QCanBusDeviceErrorOccurred(QCanBusDevice::CanBusError CanBusDevError)
 //{
 //    anDebugWrap(CanBusDbgEn,
 //           anqDebug("KO")
-//           dbg("    " _VarTrk(CanBusDevError)));
+//           anDebug("    " _VarView(CanBusDevError)));
 //}
 
 void CanBusWorker::aMsgOutRequest()
 {
     anDebugWrap(CanBusDbgEn,
            anqDebug("A Message Emitted")
-           dbg("    " _VarTrk(bufferRead.first()->GetMsgStr())));
+           anDebug("    " _VarView(bufferRead.first()->GetMsgStr())));
     emit replyAMsgOutRequest4Debug(bufferRead.first()->GetMsgStr());
     emit replyAMsgOutRequest(*bufferRead.takeFirst());
 }
@@ -190,7 +191,7 @@ void CanBusWorker::allMsgOutRequest()
     emit replyAllMsgOutRequest(bufferRead);
     anDebugWrap(CanBusDbgEn,
            anqDebug("ALL Message Emitted")
-           dbg("    " _VarTrk(bufferRead.first()->GetMsgStr())));
+           anDebug("    " _VarView(bufferRead.first()->GetMsgStr())));
     bufferRead = AListOfCanProtocol();
 }
 
@@ -213,7 +214,7 @@ bool CanBusWorker::isDevPickedUp()
     if (!IsCanPluginSupported(canPlugin)){
         anDebugWrap(CanBusDbgEn,
                anqDebug("Plugin Not Supported")
-               dbg("    " _VarTrk(canPlugin)));
+               anDebug("    " _VarView(canPlugin)));
         return false;
     }
     QString *QStrTmp = new QString();
@@ -260,6 +261,6 @@ CanBusWorker::CanBusWorker()
 {
     anDebugWrap(CanBusDbgEn,
            anqDebug("New Object Created")
-           dbg("    " _VarTrk(canPlugin))
-           dbg("    " _VarTrk(canInterfaceName)));
+           anDebug("    " _VarView(canPlugin))
+           anDebug("    " _VarView(canInterfaceName)));
 }
