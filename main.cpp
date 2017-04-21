@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    anDebug("=======PROGRAM STARTED=======");
+    anqDebug("=======PROGRAM STARTED=======");
     w.show();
 
     return a.exec();
